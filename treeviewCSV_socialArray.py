@@ -120,13 +120,13 @@ def readCrowdEgressCSV(FileName, debug=True, marginTitle=1):
     #dataFeatures = readCSV_base(FileName)
     #[Num_Data, Num_Features] = np.shape(dataFeatures)   
 
-    agentFeatures, lowerIndex, upperIndex = getData(FileName, '&Agent')
+    agentFeatures, lowerIndex, upperIndex = getData(FileName, '&Ped')
     Num_Agents=len(agentFeatures)-marginTitle
     if Num_Agents <= 0:
         agentFeatures, lowerIndex, upperIndex = getData(FileName, '&agent')
         Num_Agents=len(agentFeatures)-marginTitle
     if Num_Agents <= 0:
-        agentFeatures, lowerIndex, upperIndex = getData(FileName, '&Ped')
+        agentFeatures, lowerIndex, upperIndex = getData(FileName, '&Agent')
         Num_Agents=len(agentFeatures)-marginTitle
 
     if debug: 
@@ -541,7 +541,6 @@ notebook.add(frameExit2Door,text="  <Exit2DoorArray>  ")
 #right_frame.pack_propagate(0)
 
 #columns = ("agent", "iniPosX", "iniPosY", "iniVx", "iniVy", "timelag", "tpre", "p", "pMode", "p2", "talkRange", "aType", "inComp", "tpreMode")
-
 #columns = tuple(np.arange(1, 100))
 
 col_list=[]
@@ -549,8 +548,6 @@ for i in range(26):
     col_list.append(chr(i+65))
 print(col_list)
 columns = tuple(col_list)
-    
-#columns =("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R")
 
 scrollbarAy = Scrollbar(frameAgent, orient="vertical") #, orient="vertical", command=treeview.yview)
 scrollbarAy.pack(side=RIGHT, fill=Y)
@@ -566,32 +563,6 @@ for i in range(26):
     treeviewA.column(chr(i+65), width=70, anchor='center')
 treeviewA.pack(side=LEFT, fill=BOTH)
 
-'''
-#treeviewA.column("/", width=30, anchor='center')
-treeviewA.column("A", width=70, anchor='center')
-treeviewA.column("B", width=70, anchor='center')
-treeviewA.column("C", width=70, anchor='center')
-treeviewA.column("D", width=70, anchor='center')
-treeviewA.column("E", width=70, anchor='center')
-treeviewA.column("F", width=70, anchor='center')
-treeviewA.column("G", width=70, anchor='center')
-treeviewA.column("H", width=70, anchor='center')
-treeviewA.column("I", width=70, anchor='center')
-treeviewA.column("J", width=70, anchor='center')
-treeviewA.column("K", width=70, anchor='center')
-treeviewA.column("L", width=70, anchor='center')
-treeviewA.column("M", width=70, anchor='center')
-treeviewA.column("N", width=70, anchor='center')
-treeviewA.column("O", width=70, anchor='center')
-treeviewA.column("P", width=70, anchor='center')
-treeviewA.column("Q", width=70, anchor='center')
-treeviewA.pack(side=LEFT, fill=BOTH)
-
-#scrollbar = Scrollbar(treeviewA, orient="vertical", command=treeviewA.yview)
-#scrollbar.pack(side=RIGHT, fill=Y)
-#scrollbar.config(command=treeviewA.yview)
-'''
-
 scrollbarA2Ey = Scrollbar(frameAgent2Exit, orient="vertical") #, orient="vertical", command=treeview.yview)
 scrollbarA2Ey.pack(side=RIGHT, fill=Y)
 
@@ -601,27 +572,6 @@ scrollbarA2Ex.pack(side=BOTTOM, fill=X)
 treeviewA2E = Treeview(frameAgent2Exit, height=18, show="headings", columns=columns)  #Table
 scrollbarA2Ey.config(command=treeviewA2E.yview)
 scrollbarA2Ex.config(command=treeviewA2E.xview)
-
-'''
-#treeviewA2E.column("/", width=30, anchor='center')
-treeviewA2E.column("A", width=70, anchor='center')
-treeviewA2E.column("B", width=70, anchor='center')
-treeviewA2E.column("C", width=70, anchor='center')
-treeviewA2E.column("D", width=70, anchor='center')
-treeviewA2E.column("E", width=70, anchor='center')
-treeviewA2E.column("F", width=70, anchor='center')
-treeviewA2E.column("G", width=70, anchor='center')
-treeviewA2E.column("H", width=70, anchor='center')
-treeviewA2E.column("I", width=70, anchor='center')
-treeviewA2E.column("J", width=70, anchor='center')
-treeviewA2E.column("K", width=70, anchor='center')
-treeviewA2E.column("L", width=70, anchor='center')
-treeviewA2E.column("M", width=70, anchor='center')
-treeviewA2E.column("N", width=70, anchor='center')
-treeviewA2E.column("O", width=70, anchor='center')
-treeviewA2E.column("P", width=70, anchor='center')
-treeviewA2E.column("Q", width=70, anchor='center')
-'''
 
 for i in range(26):
     treeviewA2E.column(chr(i+65), width=70, anchor='center')
@@ -636,27 +586,6 @@ scrollbarAGx.pack(side=BOTTOM, fill=X)
 treeviewAG = Treeview(frameAgentGroup, height=18, show="headings", columns=columns)  #Table
 scrollbarAGy.config(command=treeviewAG.yview)
 scrollbarAGx.config(command=treeviewAG.xview)
-
-'''
-#treeviewAG.column("/", width=30, anchor='center')
-treeviewAG.column("A", width=70, anchor='center')
-treeviewAG.column("B", width=70, anchor='center')
-treeviewAG.column("C", width=70, anchor='center')
-treeviewAG.column("D", width=70, anchor='center')
-treeviewAG.column("E", width=70, anchor='center')
-treeviewAG.column("F", width=70, anchor='center')
-treeviewAG.column("G", width=70, anchor='center')
-treeviewAG.column("H", width=70, anchor='center')
-treeviewAG.column("I", width=70, anchor='center')
-treeviewAG.column("J", width=70, anchor='center')
-treeviewAG.column("K", width=70, anchor='center')
-treeviewAG.column("L", width=70, anchor='center')
-treeviewAG.column("M", width=70, anchor='center')
-treeviewAG.column("N", width=70, anchor='center')
-treeviewAG.column("O", width=70, anchor='center')
-treeviewAG.column("P", width=70, anchor='center')
-treeviewAG.column("Q", width=70, anchor='center')
-'''
 
 for i in range(26):
     treeviewAG.column(chr(i+65), width=70, anchor='center')
@@ -722,16 +651,6 @@ for i in range(26):
     treeviewE2D.column(chr(i+65), width=70, anchor='center')
 treeviewE2D.pack(side=LEFT, fill=BOTH)
 
-'''
-#treeviewE.column("/", width=30, anchor='center')
-treeviewE2D.column("A", width=100, anchor='center')
-treeviewE2D.column("B", width=70, anchor='center')
-treeviewE2D.column("C", width=70, anchor='center')
-treeviewE2D.column("D", width=70, anchor='center')
-treeviewE2D.column("E", width=70, anchor='center')
-treeviewE2D.column("F", width=70, anchor='center')
-treeviewE2D.pack(side=LEFT, fill=BOTH)
-'''
 
 def treeview_sort_column(tv, col, reverse):  # Treeview
 
@@ -792,165 +711,6 @@ def set_cell_value_A(event): # double click to edit the item
 
     okb = Button(root, text=str(item_text[0])+'|'+str(item_text[1])+'|'+agents[0][cn-2]+': <Save Changes>', width=56, command=saveedit)
     okb.pack() #place(x=90+(cn-1)*242,y=2+rn*20)
-
-
-def add_agent():
-    global agents, agent2exit, agentgroup
-    rn=None
-    for item in treeviewA.selection():
-
-        #item = I001
-        item_text = treeviewA.item(item, "values")
-        #print(item_text[0:2])  # Output the column number selected by users
-        #column= treeviewA.identify_column(event.x)# column
-        #row = treeviewA.identify_row(event.y)  # row
-        #cn = int(str(column).replace('#',''))
-        #rn = int(str(row).replace('I',''), base=16)
-        #print("cn:", cn)    
-        temp = item_text[0].split(" ")
-        rn = int(temp[0].strip("#"))
-
-    print("rn:", rn)
-    #try:
-    #    agents.insert(rn+2, agents[rn+1])
-    #    if bool(agent2exit):
-    #        agent2exit.insert(rn+2, agent2exit[rn+1])
-    #    if bool(agentgroup):
-    #        agentgroup.insert(rn+2, agentgroup[rn+1])
-    #except:
-    agents.append(agents[-1])
-    if bool(agent2exit):
-        agent2exit.append(agent2exit[-1])
-    if bool(agentgroup):
-        agentgroup.append(agentgroup[-1])
-    
-    if bool(agentgroup):
-        num_agents=len(agents)
-        agentgroup2=list(agentgroup) #.copy()
-        print("num_agents", num_agents)
-        #agentgroup_new = agentgroup
-        #if bool(rn):
-        #    for i in range(num_agents):
-        #        agentgroup2[i].insert(rn+2, '0')
-        #else:
-        for i in range(num_agents):
-            agentgroup2[i].insert(num_agents-1, '0')
-        #agentgroup=list(agentgroup_new)
-        #print("agentgroup:", np.shape(agentgroup))
-        for i in range(num_agents):
-            agentgroup[i]=agentgroup2[i][:num_agents]
-        
-        print(len(agentgroup)) #, np.shape(np.array(agentgroup)))
-        print(agentgroup)
-    
-
-    treeviewA.delete(*treeviewA.get_children())    
-    treeviewA2E.delete(*treeviewA2E.get_children())
-    treeviewAG.delete(*treeviewAG.get_children())
-    treeviewA.update()    
-    treeviewA2E.update()    
-    treeviewAG.update()
-    
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewA.heading(columns[i+1], text=agents[0][i])
-    for i in range(1, len(agents)): #
-        #agents[i][0]=str(i)+"# "+agents[i][0]
-        try:
-            treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
-        except:
-            treeviewA.insert('', i, values=(i))
-
-    if bool(agent2exit):
-        treeviewA2E.heading(columns[0], text="SN")
-        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
-        for i in range(1, len(agent2exit)): #
-            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
-            try:
-                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
-            except:
-                treeviewA2E.insert('', i, values=(i))
-
-    if bool(agentgroup):
-        treeviewAG.heading(columns[0], text="SN")
-        for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-            treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
-        for i in range(1, len(agentgroup)): #
-            #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
-            try:
-                treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
-            except:
-                treeviewAG.insert('', i, values=(i))
-            
-
-def del_agent():
-    
-    global agents, agent2exit, agentgroup
-    for item in treeviewA.selection():
-
-        #item = I001
-        item_text = treeviewA.item(item, "values")
-        #print(item_text[0:2])  # Output the column number selected by users
-
-    #column= treeviewA.identify_column(event.x)# column
-    #row = treeviewA.identify_row(event.y)  # row
-
-    #cn = int(str(column).replace('#',''))
-    #rn = int(str(row).replace('I',''), base=16)
-    temp = item_text[0].split(" ")
-    rn = int(temp[0].strip("#"))
-    
-    #print("cn:", cn)
-    print("rn:", rn)
-    
-    del agents[rn+1]
-    if bool(agent2exit):
-        del agent2exit[rn+1]
-    if bool(agentgroup):
-        del agentgroup[rn+1]
-    
-    for i in range(len(agents)):
-        del agentgroup[i][rn+1]
-
-    treeviewA.delete(*treeviewA.get_children())    
-    treeviewA2E.delete(*treeviewA2E.get_children())
-    treeviewAG.delete(*treeviewAG.get_children())
-    treeviewA.update()    
-    treeviewA2E.update()    
-    treeviewAG.update()
-
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewA.heading(columns[i+1], text=agents[0][i])
-    for i in range(1, len(agents)): #
-        #agents[i][0]=str(i)+"# "+agents[i][0]
-        try:
-            treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
-        except:
-            treeviewA.insert('', i, values=(i))
-    
-    if bool(agent2exit):
-        treeviewA2E.heading(columns[0], text="SN")
-        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
-        for i in range(1, len(agent2exit)): #
-            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
-            try:
-                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
-            except:
-                treeviewA2E.insert('', i, values=(i))
-                
-    if bool(agentgroup):
-        treeviewAG.heading(columns[0], text="SN")
-        for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-            treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
-        for i in range(1, len(agentgroup)): #
-            #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
-            try:
-                treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
-            except:
-                treeviewAG.insert('', i, values=(i))
 
 
 def set_cell_value_A2E(event):
@@ -1195,22 +955,191 @@ def set_cell_value_E(event):
     okb.pack() #place(x=90+(cn-1)*242,y=2+rn*20)
 
 
-def add_wall():
+def add_agent(event=None):
+    global agents, agent2exit, agentgroup
+    rn=None
+    for item in treeviewA.selection():
+        #item = I001
+        item_text = treeviewA.item(item, "values")
+        temp = item_text[0].split(" ")
+        rn = int(temp[0].strip("#"))
+
+    if rn is None:
+        for item in treeviewA2E.selection():
+            #item = I001
+            item_text = treeviewA2E.item(item, "values")
+            temp = item_text[0].split(" ")
+            rn = int(temp[0].strip("#"))
+    if rn is None:
+        for item in treeviewAG.selection():
+            #item = I001
+            item_text = treeviewAG.item(item, "values")
+            temp = item_text[0].split(" ")
+            rn = int(temp[0].strip("#"))
+
+    print("rn:", rn)
+    #try:
+    #    agents.insert(rn+2, agents[rn+1])
+    #    if bool(agent2exit):
+    #        agent2exit.insert(rn+2, agent2exit[rn+1])
+    #    if bool(agentgroup):
+    #        agentgroup.insert(rn+2, agentgroup[rn+1])
+    #except:
+    
+    agents.append(agents[-1])
+    if bool(agent2exit):
+        agent2exit.append(agent2exit[-1])
+    if bool(agentgroup):
+        agentgroup.append(agentgroup[-1])
+    
+    if bool(agentgroup):
+        num_agents=len(agents)
+        agentgroup2=list(agentgroup) #.copy()
+        print("num_agents", num_agents)
+        #if bool(rn):
+        #    for i in range(num_agents):
+        #        agentgroup2[i].insert(rn+2, '0')
+        #else:
+        for i in range(num_agents):
+            agentgroup2[i].insert(num_agents-1, '0')
+        for i in range(num_agents):
+            agentgroup[i]=agentgroup2[i][:num_agents]
+        
+        print(len(agentgroup)) #, np.shape(np.array(agentgroup)))
+        print(agentgroup)
+    
+
+    treeviewA.delete(*treeviewA.get_children())    
+    treeviewA2E.delete(*treeviewA2E.get_children())
+    treeviewAG.delete(*treeviewAG.get_children())
+    treeviewA.update()    
+    treeviewA2E.update()    
+    treeviewAG.update()
+    
+    treeviewA.heading(columns[0], text="SN")
+    for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+        treeviewA.heading(columns[i+1], text=agents[0][i])
+    for i in range(1, len(agents)): #
+        #agents[i][0]=str(i)+"# "+agents[i][0]
+        try:
+            treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
+        except:
+            treeviewA.insert('', i, values=(i))
+
+    if bool(agent2exit):
+        treeviewA2E.heading(columns[0], text="SN")
+        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
+        for i in range(1, len(agent2exit)): #
+            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
+            try:
+                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
+            except:
+                treeviewA2E.insert('', i, values=(i))
+
+    if bool(agentgroup):
+        treeviewAG.heading(columns[0], text="SN")
+        for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
+        for i in range(1, len(agentgroup)): #
+            #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
+            try:
+                treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
+            except:
+                treeviewAG.insert('', i, values=(i))
+            
+
+def del_agent(event=None):
+    
+    global agents, agent2exit, agentgroup
+    rn=None
+    for item in treeviewA.selection():
+        #item = I001
+        item_text = treeviewA.item(item, "values")
+        temp = item_text[0].split(" ")
+        rn = int(temp[0].strip("#"))
+        
+    if rn is None:
+        for item in treeviewA2E.selection():
+            #item = I001
+            item_text = treeviewA2E.item(item, "values")
+            temp = item_text[0].split(" ")
+            rn = int(temp[0].strip("#"))
+    if rn is None:
+        for item in treeviewAG.selection():
+            #item = I001
+            item_text = treeviewAG.item(item, "values")
+            temp = item_text[0].split(" ")
+            rn = int(temp[0].strip("#"))
+        
+    #column= treeviewA.identify_column(event.x)# column
+    #row = treeviewA.identify_row(event.y)  # row
+    #cn = int(str(column).replace('#',''))
+    #rn = int(str(row).replace('I',''), base=16)
+
+    print("rn:", rn)
+    
+    del agents[rn+1]
+    if bool(agent2exit):
+        del agent2exit[rn+1]
+    if bool(agentgroup):
+        del agentgroup[rn+1]
+    
+    for i in range(len(agents)):
+        del agentgroup[i][rn+1]
+
+    treeviewA.delete(*treeviewA.get_children())    
+    treeviewA2E.delete(*treeviewA2E.get_children())
+    treeviewAG.delete(*treeviewAG.get_children())
+    treeviewA.update()    
+    treeviewA2E.update()    
+    treeviewAG.update()
+
+    treeviewA.heading(columns[0], text="SN")
+    for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+        treeviewA.heading(columns[i+1], text=agents[0][i])
+    for i in range(1, len(agents)): #
+        #agents[i][0]=str(i)+"# "+agents[i][0]
+        try:
+            treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
+        except:
+            treeviewA.insert('', i, values=(i))
+    
+    if bool(agent2exit):
+        treeviewA2E.heading(columns[0], text="SN")
+        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
+        for i in range(1, len(agent2exit)): #
+            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
+            try:
+                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
+            except:
+                treeviewA2E.insert('', i, values=(i))
+                
+    if bool(agentgroup):
+        treeviewAG.heading(columns[0], text="SN")
+        for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
+        for i in range(1, len(agentgroup)): #
+            #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
+            try:
+                treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
+            except:
+                treeviewAG.insert('', i, values=(i))
+
+
+def add_wall(event=None):
     global walls
     rn=None
     for item in treeviewW.selection():
-
         #item = I001
         item_text = treeviewW.item(item, "values")
         #print(item_text[0:2])  # Output the column number selected by users
-    
-        #temp = item_text[0].split(" ")
-        #rn = int(temp[0].strip("#"))
         temp = item_text[0].split(" ")
         rn = int(temp[0].strip("#"))
-        #print("cn:", cn)
+        
     print("rn:", rn)
-    
+
     if bool(walls):
         #try:
         #    walls.insert(rn+2, walls[rn+1])
@@ -1229,7 +1158,7 @@ def add_wall():
             except:
                 treeviewW.insert('', i, values=(i))
                 
-def del_wall():
+def del_wall(event=None):
     global walls
     for item in treeviewW.selection():
         #item = I001
@@ -1243,7 +1172,7 @@ def del_wall():
     if bool(walls):
         del walls[rn+1]
         
-        treeviewW.delete(*treeviewD.get_children())    
+        treeviewW.delete(*treeviewW.get_children())    
         treeviewW.update()    
         treeviewW.heading(columns[0], text="SN")
         for i in range(len(walls[0])): #np.shape(arr1D_2D(walls))[1])
@@ -1255,17 +1184,15 @@ def del_wall():
             except:
                 treeviewW.insert('', i, values=(i))
 
-def add_door():
+def add_door(event=None):
     global doors, exit2door
     rn=None
     for item in treeviewD.selection():
-
-        #item = I001
         item_text = treeviewD.item(item, "values")
         #print(item_text[0:2])  # Output the column number selected by users
         temp = item_text[0].split(" ")
         rn = int(temp[0].strip("#"))
-        #print("cn:", cn)
+
     print("rn:", rn)
     
     if bool(doors):
@@ -1321,15 +1248,15 @@ def add_door():
                 treeviewE2D.insert('', i, values=(i))
                 
 
-def del_door():
+def del_door(event=None):
     global doors, exit2door
+    rn=None
     for item in treeviewD.selection():
         #item = I001
         item_text = treeviewD.item(item, "values")
-        #print(item_text[0:2])  # Output the column number selected by users
-
-    temp = item_text[0].split(" ")
-    rn = int(temp[0].strip("#"))
+        #print(item_text[0:2])  # Output the column number selected by users    
+        temp = item_text[0].split(" ")
+        rn = int(temp[0].strip("#"))
     
     print("rn:", rn)
     if bool(doors):
@@ -1366,17 +1293,15 @@ def del_door():
                 treeviewE2D.insert('', i, values=(i))
                 
 
-def add_exit():
+def add_exit(event=None):
     global exits, exit2door
     rn=None
     for item in treeviewE.selection():
-
-        #item = I001
         item_text = treeviewE.item(item, "values")
         #print(item_text[0:2])  # Output the column number selected by users
         temp = item_text[0].split(" ")
         rn = int(temp[0].strip("#"))
-        #print("cn:", cn)
+
     print("rn:", rn)
     
     if bool(exits):
@@ -1384,7 +1309,23 @@ def add_exit():
         #    exits.insert(rn+2, exits[rn+1])
         #except:
         exits.append(exits[-1])
-    
+
+    if bool(agent2exit):
+        
+        num_agents=len(agents)
+        num_exits=len(exits)
+        agent2exit2=agent2exit #list(exit2door) #.copy()
+        print("num_exits", num_exits)
+        
+        for i in range(num_agents):
+            agent2exit2[i].insert(num_exits-1, '0')
+        
+        for i in range(num_agents):
+            agent2exit[i]=agent2exit2[i][:num_exits]
+        
+        print(len(agent2exit)) #, np.shape(np.array(agentgroup)))
+        print(agent2exit)
+
     if bool(exit2door):
         #try:
         #    exit2door.insert(rn+2, exit2door[rn+1])
@@ -1396,7 +1337,6 @@ def add_exit():
         treeviewE.delete(*treeviewE.get_children())    
         treeviewE.update()    
         treeviewE.heading(columns[0], text="SN")
-        
         for i in range(len(exits[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
             treeviewE.heading(columns[i+1], text=exits[0][i])
         for i in range(1, len(exits)): #
@@ -1405,6 +1345,19 @@ def add_exit():
                 treeviewE.insert('', i, values=tuple(["#"+str(i-1)]+exits[i])) #[0], agents[i][1], agents[i][2], 
             except:
                 treeviewE.insert('', i, values=(i))
+
+    if bool(agent2exit):
+        treeviewA2E.delete(*treeviewA2E.get_children())
+        treeviewA2E.update() 
+        treeviewA2E.heading(columns[0], text="SN")
+        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
+        for i in range(1, len(agent2exit)): #
+            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
+            try:
+                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
+            except:
+                treeviewA2E.insert('', i, values=(i))
 
     if bool(exit2door):
         treeviewE2D.delete(*treeviewE2D.get_children())
@@ -1419,13 +1372,19 @@ def add_exit():
             except:
                 treeviewE2D.insert('', i, values=(i))
 
-def del_exit():
+def del_exit(event=None):
     global exits, exit2door
-    for item in treeviewE.selection():
-        #item = I001
-        item_text = treeviewE.item(item, "values")
-        #print(item_text[0:2])  # Output the column number selected by users
-
+    try:
+        for item in treeviewE.selection():
+            #item = I001
+            item_text = treeviewE.item(item, "values")
+            #print(item_text[0:2])  # Output the column number selected by users
+    except:
+        for item in treeviewE2D.selection():
+            #item = I001
+            item_text = treeviewE2D.item(item, "values")
+            #print(item_text[0:2])  # Output the column number selected by users
+            
     temp = item_text[0].split(" ")
     rn = int(temp[0].strip("#"))
     
@@ -1434,6 +1393,11 @@ def del_exit():
     
     if bool(exits):
         del exits[rn+1]
+        
+    if bool(agent2exit):
+        for i in range(len(agents)):
+            del agent2exit[i][rn+1]
+            
     if bool(exit2door):
         del exit2door[rn+1]
 
@@ -1449,6 +1413,19 @@ def del_exit():
                 treeviewE.insert('', i, values=tuple(["#"+str(i-1)]+exits[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
             except:
                 treeviewE.insert('', i, values=(i))
+
+    if bool(agent2exit):
+        treeviewA2E.delete(*treeviewA2E.get_children())
+        treeviewA2E.update() 
+        treeviewA2E.heading(columns[0], text="SN")
+        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
+        for i in range(1, len(agent2exit)): #
+            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
+            try:
+                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
+            except:
+                treeviewA2E.insert('', i, values=(i))
 
     if bool(exit2door):
         treeviewE2D.delete(*treeviewE2D.get_children())
@@ -1470,18 +1447,26 @@ treeviewAG.bind('<Double-1>', set_cell_value_AG)
 treeviewW.bind('<Double-1>', set_cell_value_W) 
 treeviewD.bind('<Double-1>', set_cell_value_D) 
 treeviewE.bind('<Double-1>', set_cell_value_E) 
+#treeviewE2D.bind('<Double-1>', set_cell_value_E2D) 
 root.bind("<Control-o>", file_open)
 root.bind("<Control-s>", file_save)
 root.bind("<Control-n>", file_new)
 
-'''
-treeviewA.bind('<control-a>', add_agent)
-treeviewA2E.bind('<control-a>', add_agent) 
-treeviewAG.bind('control-a>', add_agent) 
-treeviewW.bind('<control-a>', add_wall) 
-treeviewD.bind('<control-a>', add_door) 
-treeviewE.bind('<control-a>', add_exit) 
-'''
+
+treeviewA.bind('<Control-a>', add_agent)
+treeviewA2E.bind('<Control-a>', add_agent) 
+treeviewAG.bind('<Control-a>', add_agent) 
+treeviewW.bind('<Control-a>', add_wall) 
+treeviewD.bind('<Control-a>', add_door) 
+treeviewE.bind('<Control-a>', add_exit) 
+
+treeviewA.bind('<Control-d>', del_agent)
+treeviewA2E.bind('<Control-d>', del_agent) 
+treeviewAG.bind('<Control-d>', del_agent) 
+treeviewW.bind('<Control-d>', del_wall) 
+treeviewD.bind('<Control-d>', del_door) 
+treeviewE.bind('<Control-d>', del_exit) 
+
 
 for col in columns:  # bind function: enable sorting in table headings
     treeviewA.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewA, _col, False))
