@@ -220,7 +220,7 @@ def file_new(event=None):
     global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
     global openFileName
     
-    agents=[['agent', 'iniX', 'iniY', 'iniVx', 'iniVy', 'timelag', 'tpre', 'p', 'pMode', 'p2', 'talkRange', 'talkProb', 'inComp', 'aType']]
+    agents=[['agent', 'iniX', 'iniY', 'iniVx', 'iniVy', 'timelag', 'tpre', 'p', 'pMode', 'p2', 'tpreR', 'aType', 'inC', 'range']]
     agent2exit=[['agent2exit', 'exit0', 'exit1', 'exit2', 'exit3', 'exit4', 'exit5', 'exit6']]
     agentgroup=[['agent2group', 'agent0', 'agent1', 'agent2','agent3', 'agent4', 'agent5', 'agent6']]
     walls=[['walls', 'startX', 'startY', 'endX', 'endY', 'arrow', 'shape', 'inComp']]
