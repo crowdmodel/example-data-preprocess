@@ -1,5 +1,6 @@
 
 import os, sys, csv
+import re
 #import numpy as np
 
 #from tkinter import ttk
@@ -43,6 +44,34 @@ RNE2D=0
 '''
 
 openFileName = None
+
+##############################################################
+# This function will be used to read CHID from FDS input file
+def readCHID(FileName):
+
+    findHEAD=False
+    for line in open(FileName):
+        if re.match('&HEAD', line):
+            findHEAD=True
+        if  findHEAD:
+            if re.search('CHID', line):
+                temp1=line.split('CHID')
+                line1=temp1[1].strip().strip('=').strip()
+                temp2 =  re.split(r'[\s\,]+', line1)
+                keyInfo = temp2[0]
+                return keyInfo
+            if re.search('/', line):
+                findHEAD = False
+    return None
+
+
+def readTitle(FileName, Title):
+    findTitle=False
+    for line in open(FileName):
+        if re.match(Title, line):
+            findTitle=True
+            return line
+    return None
 
 
 def readCSV_base(fileName):
@@ -212,7 +241,30 @@ def readCrowdEgressCSV(FileName, debug=True, marginTitle=1):
         print ('Number of Exit2Door:', Num_Exit2Door, '\n')
         print ('Features of Exit2Door\n', exit2doorFeatures, "\n")
 
-    return agentFeatures, agent2exitFeatures, agentgroupFeatures, obstFeatures, exitFeatures, doorFeatures, exit2doorFeatures
+
+    solverFeature = readTitle(FileName, '&solver')
+    dtFeature = readTitle(FileName, '&DT')
+    dt1Feature = readTitle(FileName, '&DT_OtherList')
+    dt2Feature = readTitle(FileName, '&DT_ChangeDoor')
+    dt3Feature = readTitle(FileName, '&DT_DumpData')
+    tendFeature = readTitle(FileName, '&TEND')
+
+    simuObjFeatures = []
+    if solverFeature:
+        simuObjFeatures.append(solverFeature)
+    if dtFeature:
+        simuObjFeatures.append(dtFeature)
+    if dt1Feature:
+        simuObjFeatures.append(dt1Feature)
+    if dt2Feature:
+        simuObjFeatures.append(dt2Feature)
+    if dt3Feature:
+        simuObjFeatures.append(dt3Feature)
+    if tendFeature:
+        simuObjFeatures.append(tendFeature)
+
+    return agentFeatures, agent2exitFeatures, agentgroupFeatures, obstFeatures, exitFeatures, \
+    doorFeatures, exit2doorFeatures, simuObjFeatures
 
 
 
@@ -318,7 +370,7 @@ def file_open(event=None):
         openFileName = fnameCSV
     
     file_name_label.config(text=fnameCSV, fg="black", bg="lightgrey", font=(None, 10))
-    agents, agent2exit, agentgroup, walls, exits, doors, exit2door = readCrowdEgressCSV(fnameCSV, debug=True, marginTitle=1)
+    agents, agent2exit, agentgroup, walls, exits, doors, exit2door, simuObj = readCrowdEgressCSV(fnameCSV, debug=True, marginTitle=1)
     
     treeviewA.delete(*treeviewA.get_children())    
     treeviewA2E.delete(*treeviewA2E.get_children())
@@ -334,77 +386,105 @@ def file_open(event=None):
     treeviewD.update()    
     treeviewW.update()
     treeviewE2D.update()
-
+    textSimu.delete(1.0, END)
     #treeviewA.column(chr(66), width=130, anchor='center')
     #treeviewA2E.column(chr(66), width=130, anchor='center')
     #treeviewAG.column(chr(66), width=130, anchor='center')
 
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewA.heading(columns[i+1], text=agents[0][i])
-    for i in range(1, len(agents)): #
-        #agents[i][0]=str(i)+"# "+agents[i][0]
-        try:
-            treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
-        except:
-            treeviewA.insert('', i, values=(i))
+    try:
+        treeviewA.heading(columns[0], text="SN")
+        for i in range(len(agents[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA.heading(columns[i+1], text=agents[0][i])
+        for i in range(1, len(agents)): #
+            #agents[i][0]=str(i)+"# "+agents[i][0]
+            try:
+                treeviewA.insert('', i, values=tuple(["#"+str(i-1)]+agents[i])) #[0], agents[i][1], agents[i][2], agents[i][3], agents[i][4], agents[i][5],  agents[i][6], agents[i][7], agents[i][8], agents[i][9], agents[i][10]))
+            except:
+                treeviewA.insert('', i, values=(i))
+    except:
+        print("No agent defined in the input csv file!")
 
-    treeviewA2E.heading(columns[0], text="SN")
-    for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
-    for i in range(1, len(agent2exit)): #
-        #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
-        try:
-            treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
-        except:
-            treeviewA2E.insert('', i, values=(i))
+    try:
+        treeviewA2E.heading(columns[0], text="SN")
+        for i in range(len(agent2exit[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewA2E.heading(columns[i+1], text=agent2exit[0][i])
+        for i in range(1, len(agent2exit)): #
+            #agent2exit[i][0]=str(i)+"# "+agent2exit[i][0]
+            try:
+                treeviewA2E.insert('', i, values=tuple(["#"+str(i-1)]+agent2exit[i])) #[0], agent2exit[i][1], agent2exit[i][2], agent2exit[i][3], agent2exit[i][4], agent2exit[i][5],  agent2exit[i][6], agent2exit[i][7], agent2exit[i][8], agent2exit[i][9], agent2exit[i][10]))
+            except:
+                treeviewA2E.insert('', i, values=(i))
+    except:
+        print("No agent2exit defined in the input csv file!")
 
-    treeviewAG.heading(columns[0], text="SN")
-    for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
-    for i in range(1, len(agentgroup)): #
-        #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
-        try:
-            treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
-        except:
-            treeviewAG.insert('', i, values=(i))
+    try:
+        treeviewAG.heading(columns[0], text="SN")
+        for i in range(len(agentgroup[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewAG.heading(columns[i+1], text=agentgroup[0][i])
+        for i in range(1, len(agentgroup)): #
+            #agentgroup[i][0]=str(i)+"# "+agentgroup[i][0]
+            try:
+                treeviewAG.insert('', i, values=tuple(["#"+str(i-1)]+agentgroup[i])) #[0], agentgroup[i][1], agentgroup[i][2], agentgroup[i][3], agentgroup[i][4], agentgroup[i][5],  agentgroup[i][6], agentgroup[i][7], agentgroup[i][8], agentgroup[i][9], agentgroup[i][10]))
+            except:
+                treeviewAG.insert('', i, values=(i))
+    except:
+        print("No agentgroup defined in the input csv file!")
 
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(walls[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewW.heading(columns[i+1], text=walls[0][i])
-    for i in range(1, len(walls)): #
-        try:
-            treeviewW.insert('', i, values=tuple(["#"+str(i-1)]+walls[i])) #[0], walls[i][1], walls[i][2], walls[i][3], walls[i][4], walls[i][5],  walls[i][6], walls[i][7], walls[i][8]))
-        except:
-            treeviewW.insert('', i, values=(i))
+    try:
+        treeviewW.heading(columns[0], text="SN")
+        for i in range(len(walls[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewW.heading(columns[i+1], text=walls[0][i])
+        for i in range(1, len(walls)): #
+            try:
+                treeviewW.insert('', i, values=tuple(["#"+str(i-1)]+walls[i])) #[0], walls[i][1], walls[i][2], walls[i][3], walls[i][4], walls[i][5],  walls[i][6], walls[i][7], walls[i][8]))
+            except:
+                treeviewW.insert('', i, values=(i))
+    except:
+        print("No wall defined in the input csv file!")
 
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(exits[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewE.heading(columns[i+1], text=exits[0][i])
-    for i in range(1, len(exits)): #
-        try: 
-            treeviewE.insert('', i, values=tuple(["#"+str(i-1)]+exits[i])) #[0], exits[i][1], exits[i][2], exits[i][3], exits[i][4], exits[i][5],  exits[i][6], exits[i][7], exits[i][8]))
-        except:
-            treeviewE.insert('', i, values=(i))
+    try:
+        treeviewE.heading(columns[0], text="SN")
+        for i in range(len(exits[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewE.heading(columns[i+1], text=exits[0][i])
+        for i in range(1, len(exits)): #
+            try: 
+                treeviewE.insert('', i, values=tuple(["#"+str(i-1)]+exits[i])) #[0], exits[i][1], exits[i][2], exits[i][3], exits[i][4], exits[i][5],  exits[i][6], exits[i][7], exits[i][8]))
+            except:
+                treeviewE.insert('', i, values=(i))
+    except:
+        print("No exit defined in the input csv file!")
 
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(doors[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewD.heading(columns[i+1], text=doors[0][i])
-    for i in range(1, len(doors)): #
-        try: 
-            treeviewD.insert('', i, values=tuple(["#"+str(i-1)]+doors[i])) #[0], doors[i][1], doors[i][2], doors[i][3], doors[i][4], doors[i][5],  doors[i][6], doors[i][7], doors[i][8]))
-        except:
-            treeviewD.insert('', i, values=(i))
+    try:
+        treeviewD.heading(columns[0], text="SN")
+        for i in range(len(doors[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewD.heading(columns[i+1], text=doors[0][i])
+        for i in range(1, len(doors)): #
+            try: 
+                treeviewD.insert('', i, values=tuple(["#"+str(i-1)]+doors[i])) #[0], doors[i][1], doors[i][2], doors[i][3], doors[i][4], doors[i][5],  doors[i][6], doors[i][7], doors[i][8]))
+            except:
+                treeviewD.insert('', i, values=(i))
+    except:
+        print("No door defined in the input csv file!")
 
-    treeviewA.heading(columns[0], text="SN")
-    for i in range(len(exit2door[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
-        treeviewE2D.heading(columns[i+1], text=exit2door[0][i])
-    for i in range(1, len(exit2door)): #
-        try: 
-            treeviewE2D.insert('', i, values=tuple(["#"+str(i-1)]+exit2door[i])) #[0], exit2door[i][1], exit2door[i][2], exit2door[i][3], exit2door[i][4], exit2door[i][5],  exit2door[i][6], exit2door[i][7], exit2door[i][8]))
-        except:
-            treeviewE2D.insert('', i, values=(i))
+    try:
+        treeviewE2D.heading(columns[0], text="SN")
+        for i in range(len(exit2door[0])): #np.shape(arr1D_2D(agents))[1]):  # bind function: enable sorting in table headings
+            treeviewE2D.heading(columns[i+1], text=exit2door[0][i])
+        for i in range(1, len(exit2door)): #
+            try: 
+                treeviewE2D.insert('', i, values=tuple(["#"+str(i-1)]+exit2door[i])) #[0], exit2door[i][1], exit2door[i][2], exit2door[i][3], exit2door[i][4], exit2door[i][5],  exit2door[i][6], exit2door[i][7], exit2door[i][8]))
+            except:
+                treeviewE2D.insert('', i, values=(i))
+    except:
+        print("No exit2door defined in the input csv file!")
     
+    textSimu.delete(1.0, END)
+    textSimu.insert(END, 'QuickStart: \nStep1: Please select csv file file to read in agent data and compartement geometry data!\n')
+    textSimu.insert(END, 'Step2: Create simulation object!\n')       
+    textSimu.insert(END, 'Files selected in the last run:'+str(openFileName)+'\n')
+    for i in range(len(simuObj)):
+        textSimu.insert(END, str(simuObj[i]))
+
 
 def file_save(event=None):
 
@@ -423,14 +503,42 @@ def file_save(event=None):
         
         clearCSV(openFileName, 'Initialize the csv data file.')
         saveCSV(agents, openFileName, 'Agent Data is written as below.')
-        saveCSV(agent2exit, openFileName, 'Exit selection probilibty is written as below.')
-        saveCSV(agentgroup, openFileName, 'Agent group data is written as below.')
-
-        saveCSV(walls, openFileName, 'Wall/Obstruction data is written as below.')
-        saveCSV(exits, openFileName, 'Exit/Sink data is written as below.')
-        saveCSV(doors, openFileName, 'Door/Path data is written as below.')
         
-        saveCSV(door2exit, openFileName, 'Door2exit data is written as below.')
+        try:
+            saveCSV(agent2exit, openFileName, 'Exit selection probilibty is written as below.')
+        except:
+            print("agent2exit data is not defined!")
+            
+        try:
+            saveCSV(agentgroup, openFileName, 'Agent group data is written as below.')
+        except:
+            print("agentgroup data is not defined!")
+            
+        try:
+            saveCSV(walls, openFileName, 'Wall/Obstruction data is written as below.')
+        except:
+            print("Wall data is not defined!")
+        
+        try:
+            saveCSV(exits, openFileName, 'Exit/Sink data is written as below.')
+        except:
+            print("Exit/Sink data is not defined!")
+        
+        try:
+            saveCSV(doors, openFileName, 'Door/Path data is written as below.')
+        except:
+            print("Door/Path data is not defined!")
+            
+        try:
+            saveCSV(door2exit, openFileName, 'Door2exit data is written as below.')
+        except:
+            print("Door2exit data is not defined!")
+
+        new_contents = textSimu.get(1.0, END)
+        with open(openFileName, "a+") as open_file:
+            open_file.write(new_contents)
+            #new_contents2 = re.sub(',\t', ',', new_contents)
+            #open_file.write(new_contents2)
 
         msg.showinfo("Saved", "File Saved Successfully")
     else:
@@ -518,6 +626,7 @@ menubar.add_cascade(label="Delete", menu=delete_menu)
 notebook = Notebook(root,  width=45, height=300)      
 notebook.pack(side=TOP, padx=2, pady=2)
 
+frameSimuObj = Frame(root)
 frameAgent = Frame(root)
 frameAgent2Exit = Frame(root)
 frameAgentGroup = Frame(root)
@@ -526,6 +635,7 @@ frameExit = Frame(root)
 frameDoor = Frame(root)
 frameExit2Door = Frame(root)
 
+notebook.add(frameSimuObj,text="  <SimuObj>  ")
 notebook.add(frameAgent,text="  <AgentFeatures>  ")
 notebook.add(frameAgent2Exit,text="  <AgentExitProb>  ")
 notebook.add(frameAgentGroup,text="  <AgentGroup>  ")
@@ -533,6 +643,7 @@ notebook.add(frameWall,text="  <Wall/Obstruction>  ")
 notebook.add(frameExit,text="  <Exit/SinkPoint>  ")
 notebook.add(frameDoor,text="  <Door/Passage/WayPoint>  ")
 notebook.add(frameExit2Door,text="  <Exit2DoorArray>  ")
+
 
 #left_frame = Frame(root, width=200, height=600, bg="grey")
 #left_frame.pack_propagate(0)
@@ -636,7 +747,7 @@ for i in range(26):
     treeviewD.column(chr(i+65), width=70, anchor='center')
 treeviewD.pack(side=LEFT, fill=BOTH)
 
-### Frame of Exit
+### Frame of Exit2Door
 scrollbarE2Dy = Scrollbar(frameExit2Door, orient="vertical") #, orient="vertical", command=treeview.yview)
 scrollbarE2Dy.pack(side=RIGHT, fill=Y)
 
@@ -651,6 +762,16 @@ for i in range(26):
     treeviewE2D.column(chr(i+65), width=70, anchor='center')
 treeviewE2D.pack(side=LEFT, fill=BOTH)
 
+scrollbarSimuy = Scrollbar(frameSimuObj, orient="vertical") #, orient="vertical", command=treeview.yview)
+scrollbarSimuy.pack(side=RIGHT, fill=Y)
+
+scrollbarSimux = Scrollbar(frameSimuObj, orient="horizontal") #, orient="vertical", command=treeview.yview)
+scrollbarSimux.pack(side=BOTTOM, fill=X)
+
+textSimu = Text(frameSimuObj, bg="white", fg="black", font=("Times", 13))
+scrollbarSimuy.config(command=textSimu.yview)
+scrollbarSimux.config(command=textSimu.xview)
+textSimu.pack(expand=1, fill=BOTH)
 
 def treeview_sort_column(tv, col, reverse):  # Treeview
 
