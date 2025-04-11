@@ -1592,6 +1592,25 @@ treeviewE.bind('<Control-d>', del_exit)
 for col in columns:  # bind function: enable sorting in table headings
     treeviewA.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewA, _col, False))
 
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewA2E.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewA2E, _col, False))
+
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewAG.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewAG, _col, False))
+
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewW.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewW, _col, False))
+
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewD.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewD, _col, False))
+
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewE.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewE, _col, False))
+
+for col in columns:  # bind function: enable sorting in table headings
+    treeviewE2D.heading(col, text=col, command=lambda _col=col: treeview_sort_column(treeviewE2D, _col, False))
+
+
 #######################
 # Configure the menubar
 
@@ -1618,11 +1637,10 @@ delete_menu.add_command(label="Delete Exit", command=del_exit)#, accelerator="Ct
 delete_menu.add_command(label="Delete Door", command=del_door) #, accelerator="Ctrl+D")
 menubar.add_cascade(label="Delete", menu=delete_menu)
 
-newA = Button(frameAgent, text='New Agent', width=20, command=add_agent)
-newA.pack() #place(x=120,y=20 ) #(len(name)-1)*20+45)
+#newA = Button(frameAgent, text='New Agent', width=20, command=add_agent)
+#newA.pack() #place(x=120,y=20 ) #(len(name)-1)*20+45)
 
-delA = Button(frameAgent, text='Delete Agent', width=20, command=del_agent)
-delA.pack() #place(x=120,y=20 )
-
+#delA = Button(frameAgent, text='Delete Agent', width=20, command=del_agent)
+#delA.pack() #place(x=120,y=20 )
 
 root.mainloop()
