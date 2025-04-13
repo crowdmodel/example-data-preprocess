@@ -52,10 +52,19 @@ Exit/Sink data is written as below.
 --,9.3,4.3,10.3,5.9,0,rect,1
 
 
-solver=0
+&SOLVER=0
+&DUMPBIN=1
 
-DT=0.2
-DT_OtherList=0.6
-DT_ChangeDoor=0.6
-DT_DumpData=0.2
-TEND = 19.0
+&DT=0.2
+&DT_LIST=0.6
+&DT_EXIT=0.6
+&DT_DUMPBIN=0.2
+&TEND = 19.0
+
+&GROUP=1
+&SELF_REP=1
+&OPINION=1
+
+&ZOOM=10
+&OFFSET_X=10
+&OFFSET_Y=10
