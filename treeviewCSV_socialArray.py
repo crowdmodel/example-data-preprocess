@@ -523,6 +523,67 @@ def file_open(event=None):
 
 
 def file_save(event=None):
+    
+    global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
+    global openFileName, currentdir
+    
+    if openFileName:
+        pass
+    else:
+        new_file_name = tkf.asksaveasfilename(filetypes=(("csv files", "*.csv"),("All files", "*.*")), initialdir=currentdir)
+        if new_file_name:
+            openFileName = new_file_name
+        else:
+            msg.showerror("No File Saved!", "Please open a csv file first!")
+            return None
+    #with open(self.active_ini_filename, "w") as ini_file:
+    #self.active_ini.write(ini_file)
+    file_name_label.config(text=openFileName, fg="black", bg="lightgrey", font=(None, 10))
+    #saveEmpty()
+    
+    clearCSV(openFileName, 'Initialize the csv data file.')
+    saveCSV(agents, openFileName, 'Agent Data is written as below.')
+    
+    try:
+        saveCSV(agent2exit, openFileName, 'Exit selection probilibty is written as below.')
+    except:
+        print("agent2exit data is not defined!")
+        
+    try:
+        saveCSV(agentgroup, openFileName, 'Agent group data is written as below.')
+    except:
+        print("agentgroup data is not defined!")
+        
+    try:
+        saveCSV(walls, openFileName, 'Wall/Obstruction data is written as below.')
+    except:
+        print("Wall data is not defined!")
+    
+    try:
+        saveCSV(exits, openFileName, 'Exit/Sink data is written as below.')
+    except:
+        print("Exit/Sink data is not defined!")
+    
+    try:
+        saveCSV(doors, openFileName, 'Door/Path data is written as below.')
+    except:
+        print("Door/Path data is not defined!")
+        
+    try:
+        saveCSV(door2exit, openFileName, 'Door2exit data is written as below.')
+    except:
+        print("Door2exit data is not defined!")
+
+    new_contents = textSimu.get(1.0, END)
+    with open(openFileName, "a+") as open_file:
+        open_file.write(new_contents)
+        #new_contents2 = re.sub(',\t', ',', new_contents)
+        #open_file.write(new_contents2)
+    msg.showinfo("Saved", "File Saved Successfully")
+    return 
+
+
+def file_save_as(event=None):
 
     global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
     global openFileName, currentdir
@@ -531,54 +592,54 @@ def file_save(event=None):
     
     if new_file_name:
         openFileName = new_file_name
-
-        #with open(self.active_ini_filename, "w") as ini_file:
-        #self.active_ini.write(ini_file)
-        file_name_label.config(text=openFileName, fg="black", bg="lightgrey", font=(None, 10))
-        #saveEmpty()
-        
-        clearCSV(openFileName, 'Initialize the csv data file.')
-        saveCSV(agents, openFileName, 'Agent Data is written as below.')
-        
-        try:
-            saveCSV(agent2exit, openFileName, 'Exit selection probilibty is written as below.')
-        except:
-            print("agent2exit data is not defined!")
-            
-        try:
-            saveCSV(agentgroup, openFileName, 'Agent group data is written as below.')
-        except:
-            print("agentgroup data is not defined!")
-            
-        try:
-            saveCSV(walls, openFileName, 'Wall/Obstruction data is written as below.')
-        except:
-            print("Wall data is not defined!")
-        
-        try:
-            saveCSV(exits, openFileName, 'Exit/Sink data is written as below.')
-        except:
-            print("Exit/Sink data is not defined!")
-        
-        try:
-            saveCSV(doors, openFileName, 'Door/Path data is written as below.')
-        except:
-            print("Door/Path data is not defined!")
-            
-        try:
-            saveCSV(door2exit, openFileName, 'Door2exit data is written as below.')
-        except:
-            print("Door2exit data is not defined!")
-
-        new_contents = textSimu.get(1.0, END)
-        with open(openFileName, "a+") as open_file:
-            open_file.write(new_contents)
-            #new_contents2 = re.sub(',\t', ',', new_contents)
-            #open_file.write(new_contents2)
-        msg.showinfo("Saved", "File Saved Successfully")
     else:
-        msg.showerror("No File Open", "Please open an csv file first")
-        return
+        msg.showerror("No File Saved", "Please input a new csv file name.")
+        return None
+    #with open(self.active_ini_filename, "w") as ini_file:
+    #self.active_ini.write(ini_file)
+    file_name_label.config(text=openFileName, fg="black", bg="lightgrey", font=(None, 10))
+    #saveEmpty()
+    
+    clearCSV(openFileName, 'Initialize the csv data file.')
+    saveCSV(agents, openFileName, 'Agent Data is written as below.')
+    
+    try:
+        saveCSV(agent2exit, openFileName, 'Exit selection probilibty is written as below.')
+    except:
+        print("agent2exit data is not defined!")
+        
+    try:
+        saveCSV(agentgroup, openFileName, 'Agent group data is written as below.')
+    except:
+        print("agentgroup data is not defined!")
+        
+    try:
+        saveCSV(walls, openFileName, 'Wall/Obstruction data is written as below.')
+    except:
+        print("Wall data is not defined!")
+    
+    try:
+        saveCSV(exits, openFileName, 'Exit/Sink data is written as below.')
+    except:
+        print("Exit/Sink data is not defined!")
+    
+    try:
+        saveCSV(doors, openFileName, 'Door/Path data is written as below.')
+    except:
+        print("Door/Path data is not defined!")
+        
+    try:
+        saveCSV(door2exit, openFileName, 'Door2exit data is written as below.')
+    except:
+        print("Door2exit data is not defined!")
+
+    new_contents = textSimu.get(1.0, END)
+    with open(openFileName, "a+") as open_file:
+        open_file.write(new_contents)
+        #new_contents2 = re.sub(',\t', ',', new_contents)
+        #open_file.write(new_contents2)
+    msg.showinfo("Saved", "File Saved Successfully")
+    return
 
 
 def clearCSV(outputFile, inputStr=''):
@@ -1657,6 +1718,7 @@ file_menu = Menu(menubar, tearoff=0, bg="lightgrey", fg="black")
 file_menu.add_command(label="New", command=file_new, accelerator="Ctrl+N")
 file_menu.add_command(label="Open", command=file_open, accelerator="Ctrl+O")
 file_menu.add_command(label="Save", command=file_save, accelerator="Ctrl+S")
+file_menu.add_command(label="Save_As", command=file_save_as)
 menubar.add_cascade(label="File", menu=file_menu)
 
 add_menu = Menu(menubar, tearoff=0, bg="lightgrey", fg="black")
