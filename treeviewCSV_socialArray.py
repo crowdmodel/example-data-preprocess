@@ -44,6 +44,17 @@ RNE2D=0
 '''
 
 openFileName = None
+currentdir = None
+if os.path.exists("log.txt"):
+    for line in open("log.txt", "r"):
+        if re.match('FN', line):
+            temp =  line.split('=')
+            openFileName = temp[1].strip()
+            currentdir = os.path.dirname(openFileName)
+
+
+def viewCSV(event=None):
+    os.system('notepad '+ os.path.join(openFileName))
 
 ##############################################################
 # This function will be used to read CHID from FDS input file
@@ -65,12 +76,24 @@ def readCHID(FileName):
     return None
 
 
-def readTitle(FileName, Title):
+# Sequentially search for Title1, Title2 and Title3 through FileName
+def readTitle(FileName, Title1=None, Title2=None, Title3=None):
     findTitle=False
-    for line in open(FileName):
-        if re.match(Title, line):
-            findTitle=True
-            return line
+    if Title1:
+        for line in open(FileName):
+            if re.match(Title1, line):
+                findTitle=True
+                return line
+    if Title2:
+        for line in open(FileName):
+            if re.match(Title2, line):
+                findTitle=True
+                return line
+    if Title3:
+        for line in open(FileName):
+            if re.match(Title3, line):
+                findTitle=True
+                return line
     return None
 
 
@@ -144,7 +167,7 @@ def getData(fileName, strNote):
     #return data_result[1:, 1:]
     
 
-def readCrowdEgressCSV(FileName, debug=True, marginTitle=1):
+def readSocialCSV(FileName, debug=True, marginTitle=1):
 
     #dataFeatures = readCSV_base(FileName)
     #[Num_Data, Num_Features] = np.shape(dataFeatures)   
@@ -241,17 +264,30 @@ def readCrowdEgressCSV(FileName, debug=True, marginTitle=1):
         print ('Number of Exit2Door:', Num_Exit2Door, '\n')
         print ('Features of Exit2Door\n', exit2doorFeatures, "\n")
 
-
-    solverFeature = readTitle(FileName, '&solver')
-    dtFeature = readTitle(FileName, '&DT')
-    dt1Feature = readTitle(FileName, '&DT_OtherList')
-    dt2Feature = readTitle(FileName, '&DT_ChangeDoor')
-    dt3Feature = readTitle(FileName, '&DT_DumpData')
-    tendFeature = readTitle(FileName, '&TEND')
+    zoomFeature = readTitle(FileName, '&ZOOM', '&zoom', 'ZOOM')
+    xspaceFeature = readTitle(FileName, '&OFFSET_X', '&offset_x', 'xSpace')
+    yspaceFeature = readTitle(FileName, '&OFFSET_Y', '&offset_y', 'ySpace')
+    
+    dtFeature = readTitle(FileName, '&DT', '&dt', 'DT')
+    dt1Feature = readTitle(FileName, '&DT_LIST', '&dt_list', 'DT_UpdateList')
+    dt2Feature = readTitle(FileName, '&DT_EXIT', '&dt_exit', 'DT_ChangeExit')
+    dt3Feature = readTitle(FileName, '&DT_DUMPBIN',  '&dt_dumpbin',  'DT_DumpData')
+    tendFeature = readTitle(FileName, '&TEND', '&tend', 'TEND')
+    
+    solverFeature = readTitle(FileName, '&SOLVER', '&solver', 'solver')
+    groupFeature = readTitle(FileName, '&GROUPF', '&groupf', 'groupbehavior')
 
     simuObjFeatures = []
     if solverFeature:
         simuObjFeatures.append(solverFeature)
+    if groupFeature:
+        simuObjFeatures.append(groupFeature)
+    if zoomFeature:
+        simuObjFeatures.append(zoomFeature)
+    if xspaceFeature:
+        simuObjFeatures.append(xspaceFeature)
+    if yspaceFeature:
+        simuObjFeatures.append(yspaceFeature)
     if dtFeature:
         simuObjFeatures.append(dtFeature)
     if dt1Feature:
@@ -267,10 +303,9 @@ def readCrowdEgressCSV(FileName, debug=True, marginTitle=1):
     doorFeatures, exit2doorFeatures, simuObjFeatures
 
 
-
 def file_new(event=None):
     global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
-    global openFileName
+    global openFileName, currentdir
     
     agents=[['agent', 'iniX', 'iniY', 'iniVx', 'iniVy', 'timelag', 'tpre', 'p', 'pMode', 'p2', 'tpreR', 'aType', 'inC', 'range']]
     agent2exit=[['agent2exit', 'exit0', 'exit1', 'exit2', 'exit3', 'exit4', 'exit5', 'exit6']]
@@ -355,10 +390,11 @@ def file_new(event=None):
 def file_open(event=None):
     
     global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
-    global openFileName
+    global openFileName, currentdir
     
-    fnameCSV = tkf.askopenfilename(filetypes=(("csv files", "*.csv"),("All files", "*.*"))) #,initialdir=self.currentdir)
-        #temp=self.fname_EVAC.split('/') 
+    fnameCSV = tkf.askopenfilename(filetypes=(("csv files", "*.csv"),("All files", "*.*")), initialdir=currentdir) 
+    #,initialdir=self.currentdir)
+    #temp=self.fname_EVAC.split('/') 
     temp=os.path.basename(fnameCSV)
     currentdir = os.path.dirname(fnameCSV)
     #lb_csv.config(text = "The input csv file selected: "+str(fnameCSV)+"\n")
@@ -369,8 +405,8 @@ def file_open(event=None):
     if fnameCSV:
         openFileName = fnameCSV
     
-    file_name_label.config(text=fnameCSV, fg="black", bg="lightgrey", font=(None, 10))
-    agents, agent2exit, agentgroup, walls, exits, doors, exit2door, simuObj = readCrowdEgressCSV(fnameCSV, debug=True, marginTitle=1)
+    file_name_label.config(text=openFileName, fg="black", bg="lightgrey", font=(None, 10))
+    agents, agent2exit, agentgroup, walls, exits, doors, exit2door, simuObj = readSocialCSV(fnameCSV, debug=True, marginTitle=1)
     
     treeviewA.delete(*treeviewA.get_children())    
     treeviewA2E.delete(*treeviewA2E.get_children())
@@ -479,9 +515,9 @@ def file_open(event=None):
         print("No exit2door defined in the input csv file!")
     
     textSimu.delete(1.0, END)
-    textSimu.insert(END, 'QuickStart: \nStep1: Please select csv file file to read in agent data and compartement geometry data!\n')
-    textSimu.insert(END, 'Step2: Create simulation object!\n')       
-    textSimu.insert(END, 'Files selected in the last run:'+str(openFileName)+'\n')
+    #textSimu.insert(END, 'QuickStart: \nStep1: Please select csv file file to read in agent data and compartement geometry data!\n')
+    #textSimu.insert(END, 'Step2: Create simulation object!\n')       
+    textSimu.insert(END, 'Files selected:'+str(openFileName)+'\n')
     for i in range(len(simuObj)):
         textSimu.insert(END, str(simuObj[i]))
 
@@ -489,16 +525,16 @@ def file_open(event=None):
 def file_save(event=None):
 
     global agents, agent2exit, agentgroup, walls, exits, doors, exit2door
-    global openFileName
+    global openFileName, currentdir
 
-    new_file_name = tkf.asksaveasfilename()
+    new_file_name = tkf.asksaveasfilename(filetypes=(("csv files", "*.csv"),("All files", "*.*")), initialdir=currentdir)
+    
     if new_file_name:
         openFileName = new_file_name
 
-    if openFileName:
         #with open(self.active_ini_filename, "w") as ini_file:
         #self.active_ini.write(ini_file)
-
+        file_name_label.config(text=openFileName, fg="black", bg="lightgrey", font=(None, 10))
         #saveEmpty()
         
         clearCSV(openFileName, 'Initialize the csv data file.')
@@ -539,7 +575,6 @@ def file_save(event=None):
             open_file.write(new_contents)
             #new_contents2 = re.sub(',\t', ',', new_contents)
             #open_file.write(new_contents2)
-
         msg.showinfo("Saved", "File Saved Successfully")
     else:
         msg.showerror("No File Open", "Please open an csv file first")
@@ -1493,6 +1528,7 @@ def add_exit(event=None):
             except:
                 treeviewE2D.insert('', i, values=(i))
 
+
 def del_exit(event=None):
     global exits, exit2door
     try:
@@ -1572,7 +1608,7 @@ treeviewE.bind('<Double-1>', set_cell_value_E)
 root.bind("<Control-o>", file_open)
 root.bind("<Control-s>", file_save)
 root.bind("<Control-n>", file_new)
-
+root.bind("<Control-b>", viewCSV)
 
 treeviewA.bind('<Control-a>', add_agent)
 treeviewA2E.bind('<Control-a>', add_agent) 

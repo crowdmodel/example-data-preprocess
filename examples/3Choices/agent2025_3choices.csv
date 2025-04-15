@@ -1,6 +1,5 @@
 Initialize the csv data file.
 
-
 Agent Data is written as below.
 &Agent,00/InitalX,01/InitialY,02/iniVx,03/iniVy,04/tau,05/tpre,06/p,07/pMode,08/p2,09/tpreR,08/aType,11/inC,12/range,13/talk_tau,14/talk_prob,15/c2,radius,mass,maxSpeed
 Person0,6.33,2,0,0,0.3,3,0,fixed,0.3,30,active,1,0.7,2.6,0.7,0.3,0.35,47,1.2
@@ -52,19 +51,23 @@ Exit/Sink data is written as below.
 --,9.3,4.3,10.3,5.9,0,rect,1
 
 
-&SOLVER=0
-&DUMPBIN=1
+Door/Path data is written as below.
 
-&DT=0.2
+
+Files selected:C:/Program Files (x86)/Git/example-data-preprocess/examples/3Choices/agent2025_3choices.csv
+
+&SOLVER=0
+
+&ZOOM=10
+&OFFSET_X=10
+&OFFSET_Y=10
+
+&DT=0.1
 &DT_LIST=0.6
 &DT_EXIT=0.6
 &DT_DUMPBIN=0.2
 &TEND = 19.0
 
-&GROUP=1
+&GROUPF=1
 &SELF_REP=1
 &OPINION=1
-
-&ZOOM=10
-&OFFSET_X=10
-&OFFSET_Y=10
